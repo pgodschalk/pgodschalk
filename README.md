@@ -4,7 +4,7 @@ I am a Full Stack Engineer from the Netherlands 🇳🇱🌷
 
 ## About me
 
-- 💼 Full Stack Engineer at [Mozard](https://www.mozard.nl)
+- 💼 Platform Engineer at [Solar Monkey](https://www.solarmonkey.nl)
 - 📈 Professionally writing code since 2008
 - ❤️ I enjoy writing TypeScript, Terraform, Vue and React
 - 🌎 My website is [here](https://kernelpanics.nl)
