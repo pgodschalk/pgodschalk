@@ -4,7 +4,7 @@ I am a Full Stack Engineer from the Netherlands 🇳🇱🌷
 
 ## About me
 
-- 💼 Senior Fullstack Engineer at @Typetone
+- 💼 Senior Fullstack Engineer at [Typetone](https://typetone.ai)
 - 📈 Professionally writing code since 2008
 - ❤️ I enjoy writing TypeScript, Terraform, Vue and React
 - 🌎 My website is [here](https://kernelpanics.nl)
