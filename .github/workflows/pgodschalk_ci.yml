@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 ---
 name: pgodschalk
 
@@ -13,17 +14,19 @@ jobs:
   Lint:
     name: Lint
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Biome CLI
-        uses: biomejs/setup-biome@v2
+      - name: Set up Biome CLI
+        uses: biomejs/setup-biome@c016c38f26f2c4a6eb3662679143614a254263fd # v2.3.0
 
       - name: Run Biome
         run: biome ci
 
       - name: Run markdownlint
-        uses: DavidAnson/markdownlint-cli2-action@v19
+        uses: DavidAnson/markdownlint-cli2-action@05f32210e84442804257b2a6f20b273450ec8265 # v19.1.0
         with:
           globs: "**/*.md"
