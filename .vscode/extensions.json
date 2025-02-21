@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "biomejs.biome",
+    "DavidAnson.vscode-markdownlint",
+    "github.vscode-github-actions",
+    "redhat.vscode-yaml",
+    "sidneys1.gitconfig"
+  ]
+}
