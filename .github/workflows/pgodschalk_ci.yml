@@ -1,0 +1,86 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: pgodschalk
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+jobs:
+  lint-json:
+    name: Lint JSON
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+      - name: Set up Biome
+        uses: biomejs/setup-biome@454fa0d884737805f48d7dc236c1761a0ac3cc13 # v2.6.0
+      - name: Lint and format check with Biome
+        run: |
+          shopt -s globstar nullglob dotglob
+          files=(**/*.json **/*.jsonc)
+          if [[ ${#files[@]} -gt 0 ]]; then
+            biome ci "${files[@]}"
+          fi
+  lint-markdown:
+    name: Lint Markdown
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+      - name: Lint with markdownlint-cli2
+        uses: DavidAnson/markdownlint-cli2-action@07035fd053f7be764496c0f8d8f9f41f98305101 # v22.0.0
+        with:
+          globs: |
+            **/.github/PULL_REQUEST_TEMPLATE
+            **/*.md
+      - name: Set up bun
+        uses: oven-sh/setup-bun@735343b667d3e6f658f44d0eca948eb6282f2b76 # v2.0.2
+      - name: Cache global bun packages
+        uses: actions/cache@v5
+        with:
+          key: bun-global-markdown-${{ runner.os }}-prettier
+          path: ~/.bun/install/global
+      - name: Install Prettier
+        run: bun add --global prettier
+      - name: Format check with Prettier
+        run: |
+          prettier \
+            --check \
+            --parser markdown \
+            --prose-wrap always \
+            --print-width 80 \
+            "**/*.md" "**/.github/PULL_REQUEST_TEMPLATE"
+  lint-yaml:
+    name: Lint YAML
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: stable
+          cache: false
+      - name: Cache Go binaries
+        uses: actions/cache@v5
+        with:
+          key: go-bin-yaml-${{ runner.os }}-yamlfmt
+          path: ~/go/bin
+      - name: Install yamlfmt
+        run: go install github.com/google/yamlfmt/cmd/yamlfmt@latest
+      - name: Format check with yamlfmt
+        run: yamlfmt --lint "**/*.{yml,yaml}"
